@@ -7,13 +7,17 @@
 <style scoped>
     .button {
         border: none;
-        font-family: "Montserrat", sans-serif;
+        font-family: "Roboto", sans-serif;
         border-radius: 100px;
-        background: #008BFE;
-        padding: 16 10px;
+        width: 335px;
+        height: 68px;
         font-size: 24px;
         color: #ffffff;
         cursor: pointer;
         outline: none;
+    }
+
+    .blue {
+        background-color: #008BFE;
     }
 </style>

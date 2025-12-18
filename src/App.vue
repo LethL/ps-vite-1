@@ -1,10 +1,10 @@
 <script setup>
-    
-    const date = new Date();
+    import Button from './components/Button.vue';
+    const blue = "blue";
 </script>
 
 <template>
-    Текущая дата и время: {{ date }}
+    <Button :class=blue />
 </template>
 
 <style scoped></style>
