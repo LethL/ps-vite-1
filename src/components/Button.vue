@@ -12,12 +12,9 @@
         width: 335px;
         height: 68px;
         font-size: 24px;
-        color: #ffffff;
+        color: var(--color-white);
         cursor: pointer;
         outline: none;
-    }
-
-    .blue {
-        background-color: #008BFE;
+        background-color: var(--color-bg-blue);
     }
 </style>
