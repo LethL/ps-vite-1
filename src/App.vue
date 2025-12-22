@@ -1,9 +1,9 @@
 <script setup>
-    const date = new Date();
+    import Button from './components/Button.vue';
 </script>
 
 <template>
-    Текущая дата и время: {{ date }}
+    <Button />
 </template>
 
 <style scoped></style>
