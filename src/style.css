@@ -6,3 +6,7 @@
   --color-white: #ffffff;
   --color-bg-blue: #008BFE;
 }
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
