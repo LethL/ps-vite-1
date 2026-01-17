@@ -1,5 +1,17 @@
 <script setup>
     const emit = defineEmits(['turn-over', 'change-status']);
+    const { word, translation, state, status } = defineProps({
+        word: String,
+        translation: String,
+        state: {
+        type: String,
+        validator: (value) => ['open', 'closed'].includes(value)
+        },
+        status: {
+        type: String,
+        validator: (value) => ['success', 'fail', 'pending'].includes(value)
+        },
+    });
 
     function handleTurnOverCard() {
         emit('turn-over', 'Card turned over');
@@ -11,6 +23,7 @@
         <div class="inner">
             <p class="text">01</p>
             <p class="text bottom" @click="handleTurnOverCard()">ПЕРЕВЕНУТЬ</p>
+            <p>{{ state === "closed" ? word : translation }}</p>
         </div>
     </div>
 </template>
@@ -34,6 +47,8 @@
         height: 100%;
         border-radius: 12px;
         position: relative;
+        display: grid;
+        place-content: center;
     }
 
     .text {

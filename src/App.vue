@@ -2,18 +2,27 @@
     import Button from './components/Button.vue';
     import Score from './components/Score.vue';
     import Card from './components/Card.vue';
+    import { ref } from 'vue';
 
     function handleTurnOverCard(event) {
         console.log(event);
     }
+
+    const score = ref(100);
+    const card = ref({
+        word: 'dust-coat',
+        translation: 'Караван верблюдов',
+        state: 'closed',
+        status: 'pending'
+    })
 </script>
 
 <template>
     <header class="header">
         ЗАПОМНИ СЛОВО
-        <Score value="100" /> 
+        <Score :value="score" /> 
     </header>
-    <Card @turn-over="handleTurnOverCard" />
+    <Card v-bind="card" @turn-over="handleTurnOverCard" />
     <Button />
 </template>
 
