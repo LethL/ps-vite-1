@@ -1,5 +1,5 @@
 <script setup>
-    const emit = defineEmits(['turn-over', 'change-status']);
+import { ref, computed } from 'vue';
     const { word, translation, state, status } = defineProps({
         word: String,
         translation: String,
@@ -13,17 +13,40 @@
         },
     });
 
+    const initialState = ref(state);
+    const initialStatus = ref(status);
+
     function handleTurnOverCard() {
-        emit('turn-over', 'Card turned over');
+        initialState.value = 'open';
     }
+
+    function handleAnswerCard(status) {
+        initialStatus.value = status;
+    }
+
+    const dataModify = computed(() => {
+        return {
+            'isClosed': initialState.value === 'closed',
+            'isSuccess': initialStatus.value === 'success',
+            'isFail': initialStatus.value === 'fail',
+            'isAnswered': initialStatus.value !== 'pending'
+        }
+    });
 </script>
 
 <template>
     <div class="wrapper">
         <div class="inner">
             <p class="text">01</p>
-            <p class="text bottom" @click="handleTurnOverCard()">ПЕРЕВЕНУТЬ</p>
-            <p>{{ state === "closed" ? word : translation }}</p>
+            <img v-if="dataModify.isSuccess" src="/assets/yes.svg" alt="success" class="text top" />
+            <img v-else-if="dataModify.isFail" src="/assets/no.svg" alt="fail" class="text top" />
+            <p>{{ dataModify.isClosed ? word : translation }}</p>
+            <p v-if="dataModify.isClosed" class="text bottom" @click="handleTurnOverCard()">ПЕРЕВЕНУТЬ</p>
+            <div v-if="!dataModify.isClosed && !dataModify.isAnswered" class="text bottom">
+                <img src="/assets/no.svg" alt="no" @click="handleAnswerCard('fail')" />
+                <img src="/assets/yes.svg" alt="yes" @click="handleAnswerCard('success')" />
+            </div>
+            <p v-if="dataModify.isAnswered" class="text bottom">ЗАВЕРШЕНО</p>
         </div>
     </div>
 </template>
@@ -57,11 +80,22 @@
         left: 16px;
         margin: 0;
         background-color: #FFFFFF;
+        cursor: pointer;
     }
 
     .bottom {
         top: 98%;
         left: 50%;
         transform: translateX(-50%);
+        display: flex;
+        gap: 32px;
+    }
+
+    .top {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
+        top: -17px;
     }
 </style>
