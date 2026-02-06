@@ -2,7 +2,7 @@
     import Button from './components/Button.vue';
     import Score from './components/Score.vue';
     import Card from './components/Card.vue';
-    import { onMounted, ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
 
     const score = ref(100);
     const cardsData = ref([]);
@@ -12,6 +12,17 @@
         const data = await res.json();
         cardsData.value = data;
     };
+
+    const dataModify = computed(() => {
+        if (cardsData.value.length === 0) {
+            return [];
+        }
+        return cardsData.value.map(card => ({
+            ...card,
+            state: 'closed',
+            status: 'pending'
+        }));
+    });
 
     onMounted(() => {
         getCards();
@@ -24,7 +35,7 @@
         <Score :value="score" /> 
     </header>
     <div class="cards">
-        <Card v-for="(card, idx) in cardsData" v-bind="card" :key="card.word" :index="++idx" />
+        <Card v-for="(card, idx) in dataModify" v-bind="card" :key="card.word" :index="++idx" />
     </div>
     <div class="btn_wrapper">
         <Button />
