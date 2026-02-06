@@ -2,22 +2,31 @@
     import Button from './components/Button.vue';
     import Score from './components/Score.vue';
     import Card from './components/Card.vue';
-    import { ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
 
     const score = ref(100);
-    const data = ref([
-        {
-        word: 'dust-coat',
-        translation: 'Караван верблюдов',
-        state: 'closed',
-        status: 'pending'
-        },        {
-        word: 'test',
-        translation: 'Караван верблюдов',
-        state: 'closed',
-        status: 'pending'
-        },
-    ]);
+    const cardsData = ref([]);
+
+    async function getCards() {
+        const res = await fetch('http://localhost:8080/api/random-words');
+        const data = await res.json();
+        cardsData.value = data;
+    };
+
+    const dataModify = computed(() => {
+        if (cardsData.value.length === 0) {
+            return [];
+        }
+        return cardsData.value.map(card => ({
+            ...card,
+            state: 'closed',
+            status: 'pending'
+        }));
+    });
+
+    onMounted(() => {
+        getCards();
+    });
 </script>
 
 <template>
@@ -26,9 +35,11 @@
         <Score :value="score" /> 
     </header>
     <div class="cards">
-        <Card v-for="card in data" v-bind="card" :key="card.word" />
+        <Card v-for="(card, idx) in dataModify" v-bind="card" :key="card.word" :index="++idx" />
     </div>
-    <Button />
+    <div class="btn_wrapper">
+        <Button />
+    </div>
 </template>
 
 <style scoped>
@@ -42,7 +53,13 @@
 
     .cards {
         display: flex;
+        flex-wrap: wrap;
         gap: 100px;
         padding: 0 60px;
+        margin: 80px 0;
+    }
+
+    .btn_wrapper {
+        text-align: center;
     }
 </style>
