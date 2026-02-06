@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
-    const { word, translation, state, status } = defineProps({
+    const { word, translation, state, status, index } = defineProps({
         word: String,
         translation: String,
         state: {
@@ -9,8 +9,10 @@ import { ref, computed } from 'vue';
         },
         status: {
         type: String,
-        validator: (value) => ['success', 'fail', 'pending'].includes(value)
+        validator: (value) => ['success', 'fail', 'pending'].includes(value),
+        default: 'closed'
         },
+        index: Number
     });
 
     const initialState = ref(state);
@@ -37,7 +39,7 @@ import { ref, computed } from 'vue';
 <template>
     <div class="wrapper">
         <div class="inner">
-            <p class="text">01</p>
+            <p class="text">{{ index }}</p>
             <img v-if="dataModify.isSuccess" src="/assets/yes.svg" alt="success" class="text top" />
             <img v-else-if="dataModify.isFail" src="/assets/no.svg" alt="fail" class="text top" />
             <p>{{ dataModify.isClosed ? word : translation }}</p>
@@ -72,6 +74,7 @@ import { ref, computed } from 'vue';
         position: relative;
         display: grid;
         place-content: center;
+        padding: 8px;
     }
 
     .text {
